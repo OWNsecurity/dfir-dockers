@@ -1,24 +1,21 @@
-# Use a functional wine-dotnet image
-FROM chambm/wine-dotnet:4.7-x64
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine-amd64 AS build
 
 # Update the base image
-RUN apt-get update && apt-get --allow-unauthenticated -y upgrade && apt-get --allow-unauthenticated -y dist-upgrade
+RUN apk add --update-cache git
+RUN git clone https://github.com/EricZimmerman/AmcacheParser.git /source
+RUN apk del git
+WORKDIR /source
 
-# Init wine
-RUN winecfg
+RUN dotnet restore -r linux-musl-x64 /p:PublishReadyToRun=true
 
-# Download AmcacheParser.zip
-ADD https://f001.backblazeb2.com/file/EricZimmermanTools/AmcacheParser.zip /ZimmermanTools/
-# Extract and delete archive
-RUN unzip /ZimmermanTools/AmcacheParser.zip -d /ZimmermanTools && rm /ZimmermanTools/AmcacheParser.zip
+WORKDIR /source/AmcacheParser
+RUN dotnet publish -c release -o /app -r linux-musl-x64 -f net6.0 --self-contained true --no-restore
 
-# Shared dir
-VOLUME /data
-# Default working dir
-WORKDIR /data
+# final stage/image
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine-amd64
+RUN apk -U upgrade
+WORKDIR /app
+COPY --from=build /app ./
 
-# Default entrypoint: AmcacheParser.exe
-ENTRYPOINT ["/usr/bin/wine64", "/ZimmermanTools/AmcacheParser.exe"]
-
-# Default argument
+ENTRYPOINT ["dotnet", "/app/AmcacheParser.dll"]
 CMD ["--help"]

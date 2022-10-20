@@ -1,0 +1,2 @@
+alias amcacheparser='docker run --rm -v $PWD:/data amcacheparser $@'
+alias mftecmd='docker run --rm -v $PWD:/data mftecmd -f $@'
