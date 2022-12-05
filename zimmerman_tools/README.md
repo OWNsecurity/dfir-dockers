@@ -6,13 +6,12 @@ You can build each Dockerfile with the following command:
 ## Use
 
 Each container comes with:
- - a shared volume: `/data`
- - a working dir: `/data`
- - a default entrypoint: `wine64 exec_path`
+ - a working dir: `/app`
+ - a default entrypoint: `dotnet /app/<ToolName>.dll`
  - a default cmd: `--help`
 
 You can mount the /data when running the container:
- - `docker run [--rm] [-it] -v $PWD:/data NAME`
+ - `docker run [--rm] [-it] -v $PWD:/data NAME (OPTS)`
 
 ## Alias
 

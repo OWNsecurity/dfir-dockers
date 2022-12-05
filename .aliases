@@ -1,0 +1,8 @@
+alias amcacheparser='docker run --rm -v $PWD:/data amcacheparser $@'
+alias evtxcmd='docker run --rm -v $PWD:/data evtxcmd -d $@'
+alias iisgeolocate='docker run --rm -v $PWD:/data iisgeolocate -d $@'
+alias jlecmd='docker run --rm -v $PWD:/data jlecmd -d $@'
+alias lecmd='docker run --rm -v $PWD:/data lecmd -d $@'
+alias mftecmd='docker run --rm -v $PWD:/data mftecmd -f $@'
+alias recmd='docker run --rm -v $PWD:/data recmd -d $@'
+alias sbecmd='docker run --rm -v $PWD:/data sbecmd -d $@'
